@@ -33,8 +33,8 @@ done
 
 APP_HOME=$( cd "${APP_HOME-.}" && pwd -P ) || exit
 
-APP_NAME="Gradle"
-app_args="$()"
+app_name=Gradle
+app_args=""
 
 case $( uname ) in
 *[Cc][Yy][Gg][Ww][Ii][Nn]* )
@@ -59,18 +59,8 @@ case $( uname ) in
     ;;
 esac
 
-if [ "$ITERM_SESSION_ID" != "" ] -o [ "$TERM_PROGRAM" = "iTerm.app" ] ; then
-    export TERM_PROGRAM_VERSION
-fi
+JAVA_OPTS=$( printf '%s\n' "${JAVA_OPTS}" | sed 's|\\\\|\\\\\\\\|g' )
 
-DETECT_MODULES=true
-
-if [ "$DETECT_MODULES" = "true" ]; then
-    if command -v java > /dev/null 2>&1 && [ "$(java -version 2>&1 | head -c 8)" = "openjdk " ] || [ "$(java -version 2>&1 | head -c 10)" = "java version" ]; then
-        for module in java.base java.compiler java.desktop java.instrument java.management java.prefs java.rmi java.scripting java.sql java.xml; do
-            CLASSPATH="$CLASSPATH:$JAVA_HOME/jmods/$module.jmod"
-        done
-    fi
-fi
+CLASSPATH=$APP_HOME/gradle/wrapper/gradle-wrapper.jar
 
 exec "$JAVACMD" "$@"
